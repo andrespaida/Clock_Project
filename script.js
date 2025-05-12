@@ -4,11 +4,14 @@ const radius = canvas.height / 2;
 ctx.translate(radius, radius);
 
 function drawClock() {
+  ctx.clearRect(-radius, -radius, canvas.width, canvas.height); // clear canvas
+
   drawFace(ctx, radius);
-  drawNumbers(ctx, radius);
+  drawNumbers(ctx, radius);   // <-- asegúrate de que esta llamada esté aquí
   drawTime(ctx, radius);
   updateDigitalClock();
 }
+
 
 function drawFace(ctx, radius) {
   ctx.beginPath();
@@ -24,17 +27,16 @@ function drawNumbers(ctx, radius) {
   ctx.font = radius * 0.15 + "px Arial";
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
+
   for (let num = 1; num <= 12; num++) {
-    let ang = num * Math.PI / 6;
-    ctx.rotate(ang);
-    ctx.translate(0, -radius * 0.85);
-    ctx.rotate(-ang);
-    ctx.fillText(num.toString(), 0, 0);
-    ctx.rotate(ang);
-    ctx.translate(0, radius * 0.85);
-    ctx.rotate(-ang);
+    const angle = num * Math.PI / 6;
+    const x = radius * 0.75 * Math.sin(angle);
+    const y = -radius * 0.75 * Math.cos(angle);
+    ctx.fillStyle = "black";  // Ensure text is visible
+    ctx.fillText(num.toString(), x, y);
   }
 }
+
 
 function drawTime(ctx, radius) {
   const now = new Date();
